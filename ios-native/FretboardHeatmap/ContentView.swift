@@ -1,0 +1,226 @@
+//
+//  ContentView.swift
+//  FretboardHeatmap
+//
+//  Created by Sean Avery Suguitan on 2025-12-18.
+//
+
+import SwiftUI
+
+///  The Main Hub
+///
+///  Manages the main components states and assembles them into the UI 
+struct ContentView: View {
+    // MARK: Main States
+    @State private var noteLabels: Bool = false // Toggle label display for notes
+    @State private var topMenu: menuChoice? = nil // If user is on "CHORDS" or "SCALES" menu
+    @State private var selectedRoot: String? = nil // The root a user has chosen
+    @State private var selectedDropdownOption: String = "Initial Display" // Dropdown options for selectedRoot
+    
+    // MARK: Main Layout
+    var body: some View {
+        VStack(spacing: 0.0) {
+            
+            topMenuArea
+            
+            ZStack {
+               guitarNeckView
+               guitarStringsView
+               heatmapView
+            }
+            
+            Spacer() // Prevent default white background
+            
+            bottomMenuArea
+        }
+        .background(Color.black.ignoresSafeArea())
+        
+        // Haptics
+        .sensoryFeedback(.impact(weight: .heavy, intensity: 1.0), trigger: noteLabels)
+        .sensoryFeedback(.impact(weight: .medium, intensity: 1.0), trigger: topMenu)
+        .sensoryFeedback(.impact(weight: .heavy, intensity: 1.0), trigger: selectedRoot)
+
+    }
+    
+    // MARK: topMenuArea Components
+    /// Generate top menu and dropdown components
+    private var topMenuArea: some View {
+            ZStack {
+                HStack(spacing: 40) {
+                    // Labels
+                    topMenuButton("LABELS", isSelected: noteLabels) {
+                        noteLabels.toggle()
+                    }
+                    
+                    // Chords
+                    topMenuButton("CHORDS", isSelected: topMenu == .chords) {
+                        keyMatcher(to: .chords)
+                    }
+
+                    // Scales
+                    topMenuButton("SCALES", isSelected: topMenu == .scales) {
+                        keyMatcher(to: .scales)
+                    }
+                }
+                
+                // Dropdown
+                HStack {
+                    Spacer() // position far right
+                    
+                    if let topMenu = topMenu {
+                        TopMenuDropdown(selectedDropdownOption: $selectedDropdownOption, topMenu: topMenu)
+                    }
+                }
+            }
+            .padding(.bottom, 15)
+            .frame(maxWidth: .infinity)
+        }
+    
+    /// Top menu buttons styling
+    private func topMenuButton(_ title: String, isSelected: Bool, action: @escaping () -> Void) -> some View {
+        Button(action: {
+            withAnimation(.easeIn(duration: 0.3)) {
+                action()
+            }
+        }) {
+            Text(title)
+                .font(.system(.headline))
+                .foregroundColor(isSelected ? .yellow : .white)
+        }
+    }
+    
+    /// Display same key for new top menu choice
+    private func keyMatcher(to selected: menuChoice) {
+        guard topMenu != selected else { return } // prevent multiple taps
+        
+        let sameKey = TopMenuKeyMatcher.getMatch(for: selectedDropdownOption, topMenu: selected)
+        
+        topMenu = selected
+        selectedDropdownOption = sameKey
+    }
+    
+    // MARK: guitarNeckView Components
+    /// Generate fretboard wood and frets for guitar neck
+    private var guitarNeckView: some View {
+            ZStack {
+                // Fretboard Wood
+                RoundedRectangle(cornerRadius: 0.0)
+                    .fill(LinearGradient(
+                        colors: [
+                            Color(red: 0.1, green: 0, blue: 0.02),
+                            Color(red: 0.25, green: 0.15, blue: 0.1),
+                            Color(red: 0.1, green: 0.05, blue: 0.02)
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    ))
+                    .frame(height: 280.0)
+                    .padding(.top, -45)
+                
+                // Frets (1-12)
+                HStack(spacing: 0) {
+                    Rectangle().fill(Color(white: 0.9)).frame(width: 10) // Nut
+                    
+                    ForEach(0..<12, id: \.self) { index in
+                        let fret = GuitarSpecs.frets[index]
+                        Color.clear
+                            .frame(width: fret)
+                            .overlay {
+                                fretInlays(for: index)
+                            }
+                        Rectangle().fill(Color.gray).frame(width: 3)
+                    }
+                    Spacer()
+                }
+                .frame(height: 280.0)
+                .padding(.top, -45)
+            }
+        }
+    
+    /// Fret inlay styling (grey circles)
+        @ViewBuilder
+    private func fretInlays(for index: Int) -> some View {
+        if [2, 4, 6, 8].contains(index) { // single dot
+            Circle()
+                .fill(Color(white: 0.7))
+                .frame(width: 20.0, height: 20.0)
+        } else if index == 11 { // double dot
+            VStack(spacing: 80.0) {
+                Circle().fill(Color(white: 0.7)).frame(width: 20.0, height: 20.0)
+                Circle().fill(Color(white: 0.7)).frame(width: 20.0, height: 20.0)
+            }
+        }
+    }
+    
+    // MARK: guitarStringsView Component
+    /// Generate guitar strings on fretboard
+    private var guitarStringsView: some View {
+        VStack(spacing: 0) {
+            ForEach(0..<6, id: \.self) { index in
+                Spacer()
+                Rectangle()
+                    .fill(Color(white: 0.6))
+                    .frame(height: GuitarSpecs.strings[index])
+                    .frame(maxWidth: .infinity)
+            }
+            Spacer()
+        }
+        .frame(height: 350)
+        .padding(.top, -45)
+    }
+    
+    // MARK: heatmapView Component
+    /// Generate heatmap dots and labels on fretboard
+    private var heatmapView: some View {
+        HeatmapLogic(
+            selectedRoot: selectedRoot,
+            topMenu: topMenu,
+            selectedDropdownOption: selectedDropdownOption,
+            noteLabels: noteLabels,
+            frets: GuitarSpecs.frets
+        )
+        .frame(height: 350)
+        .padding(.top, -45)
+    }
+    
+    // MARK: - bottomMenuArea Component
+    /// Generate labels for bottom menu
+        @ViewBuilder
+        private var bottomMenuArea: some View {
+            if topMenu != nil {
+                HStack(spacing: 20) {
+                    ForEach(GuitarSpecs.roots, id: \.self) { root in
+                        
+                        let bottomMenuLabels = BottomMenuLabels.getLabels(
+                            for: root,
+                            topMenu: topMenu,
+                            dropdownChoice: selectedDropdownOption
+                        )
+                        
+                        let selectedLabel: Bool = (selectedRoot == root)
+                        
+                        // Highlight selected root
+                        Button(action: {
+                            withAnimation(.easeIn(duration: 0.3)) {
+                                selectedRoot = root
+                            }
+                        })
+                        {
+                            Text(bottomMenuLabels)
+                                .font(.system(.headline))
+                                .frame(width: 70.0, height: 50.0)
+                                .background(Color.white.opacity(0.1))
+                                .foregroundColor(selectedLabel ? .yellow : .white)
+                                .cornerRadius(8.0)
+                        }
+                    }
+                }
+                .padding(.top, -30.0)
+            }
+        }
+        
+}
+
+#Preview {
+    ContentView()
+}
