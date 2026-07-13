@@ -1,7 +1,7 @@
 export type MenuChoice = 'chords' | 'scales';
 
 /**
- * Map active string to active fret
+ * Fret positions for active string 
  * @example { 0: [3], 1: [2, 5] } -> String 0 (Low E) has a note on Fret 3
  */
 export interface FretMap {
@@ -9,18 +9,18 @@ export interface FretMap {
 }
 
 /**
- * Map string-fret combo to specific finger
- * @example { "1-3": "3" } -> String 1, Fret 3 uses ring finger (3)
+ * Finger positions for current string 
+ * @example { "1-3": "3" } -> String 1 (B), Fret 3 uses Finger 3
  */
 export interface ChordFingerNumbers {
   [stringFretKey: string]: string; 
 }
   
 /**
- * All fretboard positions for each root 
+ * Fretboard positions for chosen root 
  * @example 
  * 'G': {
-    0: [3, 15] -> G root note appears on fret 3 and 15 of Low E string 
+    0: [3, 15] -> For G root, String 0 (Low E) contains root notes on Frets 3 and 15  
   }, 
  */ 
 export interface RootNoteMap {
@@ -30,10 +30,10 @@ export interface RootNoteMap {
 }
 
 /**
- * All fretboard positions for chord/scale patterns of each root 
+ * Fretboard positions for chord/scale patterns of chosen root 
  * @example 
  * chords: {
-    'G': { 0: [3], 1: [2], 2: [0], 3: [0], 4: [3], 5: [3] } -> G major chord positions 
+    'G': { 0: [3], 1: [2], 2: [0], 3: [0], 4: [3], 5: [3] } -> G maj chord positions
   },
  */ 
 export interface DropdownData {
@@ -43,11 +43,11 @@ export interface DropdownData {
 }
 
 /**
- * All fretboard positions for finger number/fret label of each root 
+ * Fretboard positions for finger number/fret label of chosen root 
  * @example 
  chords: {
     'C': {
-      "1-3": "3" -> on the A string, 3rd fret, Use finger 3
+      "1-3": "3" -> For C root, String 1 Fret 3 has finger number/label on Fret 3
     },
  */ 
 export interface FingerNumberData {
