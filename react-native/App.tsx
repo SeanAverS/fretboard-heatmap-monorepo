@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: '#fff',
     textAlign: 'center',
-    marginVertical: 20,
+    marginVertical: 5,
     fontWeight: 'bold',
   },
   // custom safe area for extending guitar neck width
