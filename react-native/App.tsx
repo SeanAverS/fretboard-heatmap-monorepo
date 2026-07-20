@@ -10,13 +10,15 @@ function App(): React.JSX.Element {
   const rootNoteMap = useMemo(() => generateRootNoteMap(), []);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Fretboard Heatmap</Text>
-      
-      <Fretboard activeRoot={activeRoot} rootNoteMap={rootNoteMap} />
-      
-      <RootSelector activeRoot={activeRoot} onSelectRoot={setActiveRoot} />
-    </SafeAreaView>
+    <View style={styles.container}>
+        <Text style={styles.title}>Fretboard Heatmap</Text>
+        
+        <View style={styles.boardContainerWrapper}>
+          <Fretboard activeRoot={activeRoot} rootNoteMap={rootNoteMap} />
+        </View>
+        
+          <RootSelector activeRoot={activeRoot} onSelectRoot={setActiveRoot} />
+    </View>
   );
 }
 
@@ -32,6 +34,11 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     fontWeight: 'bold',
   },
+  // custom safe area for extending guitar neck width
+  boardContainerWrapper: {
+    width: '100%',
+    alignItems: 'center'
+  }
 });
 
 export default App;
