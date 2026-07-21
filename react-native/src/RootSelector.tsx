@@ -18,7 +18,8 @@ export const RootSelector: React.FC<SelectorProps> = ({ activeRoot, onSelectRoot
           style={[styles.button, activeRoot === root && styles.activeButton]} // style selected label button
           onPress={() => onSelectRoot(root)} // handle label press
         >
-          <Text style={[styles.text, activeRoot === root && styles.activeText]}>{root}</Text> {/* style selected label text */}
+          <Text style={[styles.text, activeRoot === root && styles.activeText]}>{root}</Text> 
+          {/* style selected label text */}
         </TouchableOpacity>
       ))}
     </View>
