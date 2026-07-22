@@ -37,4 +37,13 @@ export class NoteAlphabet {
     const notePosition = (this.openStringIndex[stringIndex] + fret) % 12;
     return this.notes[notePosition];
   }
+
+  /**
+   * Get the index of a note name
+   * @param noteName - The name of the note
+   * @returns - Index of the note (0-11) or -1 if not found
+   */
+  static getNoteIndex(noteName: string): number {
+    return this.notes.indexOf(noteName);
+  }
 }
