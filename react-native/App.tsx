@@ -1,6 +1,5 @@
 import React, { useState, useMemo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { RootSelector } from './src/RootSelector';
 import { PatternSelector } from './src/PatternSelector';
 import { Fretboard } from './src/Fretboard';
