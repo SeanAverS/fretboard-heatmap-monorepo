@@ -4,14 +4,13 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { GuitarSpecs } from './GuitarSpecs';
 import { getFretPositions } from './FretPositions';
-import { RootNoteMap } from './types';
+import { FretMap } from './types';
 
 interface FretboardProps {
-  activeRoot: string; // the selected root 
-  rootNoteMap: RootNoteMap; // fretboard positions of selected root
+  fretMap: FretMap;
 }
 
-export const Fretboard: React.FC<FretboardProps> = ({ activeRoot, rootNoteMap }) => {
+export const Fretboard: React.FC<FretboardProps> = ({ fretMap }) => {
   const fretPositions = getFretPositions();
 
   return (
@@ -19,7 +18,7 @@ export const Fretboard: React.FC<FretboardProps> = ({ activeRoot, rootNoteMap })
       <View style={styles.neck} />
       
       {fretPositions.map((pos, index) => {
-        const isRoot = rootNoteMap[activeRoot][pos.stringIndex]?.includes(pos.fretIndex); // current fretboard position in specific root map 
+        const isHighlighted = fretMap[pos.stringIndex]?.includes(pos.fretIndex); 
         
         return (
           <View
@@ -29,7 +28,7 @@ export const Fretboard: React.FC<FretboardProps> = ({ activeRoot, rootNoteMap })
               {
                 left: pos.x - GuitarSpecs.CIRCLE_SIZE / 2,
                 top: pos.y - GuitarSpecs.CIRCLE_SIZE / 2,
-                backgroundColor: isRoot ? '#FF3B30' : 'rgba(255,255,255,0.1)', // style root note differently 
+                backgroundColor: isHighlighted ? '#FF3B30' : 'rgba(255,255,255,0.1)', // style highlighted notes
               },
             ]}
           />

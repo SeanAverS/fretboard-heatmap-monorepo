@@ -2,22 +2,35 @@ import React, { useState, useMemo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { RootSelector } from './src/RootSelector';
+import { PatternSelector } from './src/PatternSelector';
 import { Fretboard } from './src/Fretboard';
 import { generateRootNoteMap } from './src/RootNotePositions';
+import { getHeatmap } from './src/HeatmapEngine';
 
 function App(): React.JSX.Element {
   const [activeRoot, setActiveRoot] = useState<string>('G');
+  const [activePattern, setActivePattern] = useState<string>('major');
   const rootNoteMap = useMemo(() => generateRootNoteMap(), []);
+
+  const heatMap = useMemo(() => {
+    if (activePattern === 'Root Only') {
+      return rootNoteMap[activeRoot];
+    }
+    return getHeatmap(activeRoot, activePattern);
+  }, [activeRoot, activePattern, rootNoteMap]);
 
   return (
     <View style={styles.container}>
         <Text style={styles.title}>Fretboard Heatmap</Text>
         
         <View style={styles.boardContainerWrapper}>
-          <Fretboard activeRoot={activeRoot} rootNoteMap={rootNoteMap} />
+          <Fretboard fretMap={heatMap} />
         </View>
         
+        <View style={styles.selectors}>
           <RootSelector activeRoot={activeRoot} onSelectRoot={setActiveRoot} />
+          <PatternSelector activePattern={activePattern} onSelectPattern={setActivePattern} />
+        </View>
     </View>
   );
 }
@@ -38,6 +51,11 @@ const styles = StyleSheet.create({
   boardContainerWrapper: {
     width: '100%',
     alignItems: 'center'
+  },
+  selectors: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10,
   }
 });
 
