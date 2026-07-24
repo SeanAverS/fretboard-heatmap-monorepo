@@ -5,10 +5,15 @@ import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { GuitarSpecs } from './GuitarSpecs';
 
 interface SelectorProps {
-  activeRoot: string; // the selected label 
-  onSelectRoot: (root: string) => void; // callback to handle label  press
+  /** the selected bottom menu label */
+  activeRoot: string; 
+  /** callback to handle bottom menu label selection */
+  onSelectRoot: (root: string) => void; 
 }
 
+/**
+ * Renders the bottom menu labels for selecting the root. 
+ */
 export const RootSelector: React.FC<SelectorProps> = ({ activeRoot, onSelectRoot }) => {
   return (
     <View style={styles.container}>

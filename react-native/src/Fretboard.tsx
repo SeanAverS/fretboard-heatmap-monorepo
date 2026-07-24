@@ -10,6 +10,9 @@ interface FretboardProps {
   fretMap: FretMap;
 }
 
+/**
+ * Renders the fretboard and Heatmap. 
+ */
 export const Fretboard: React.FC<FretboardProps> = ({ fretMap }) => {
   const fretPositions = getFretPositions();
 
