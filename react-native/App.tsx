@@ -21,11 +21,9 @@ function App(): React.JSX.Element {
   return (
     <View style={styles.container}>
         <Text style={styles.title}>Fretboard Heatmap</Text>
-        
         <View style={styles.boardContainerWrapper}>
-          <Fretboard fretMap={heatMap} />
-        </View>
-        
+          <Fretboard fretMap={heatMap} rootNotePositions={rootNoteMap[activeRoot]} />
+        </View> 
         <View style={styles.selectors}>
           <RootSelector activeRoot={activeRoot} onSelectRoot={setActiveRoot} />
           <PatternSelector activePattern={activePattern} onSelectPattern={setActivePattern} />

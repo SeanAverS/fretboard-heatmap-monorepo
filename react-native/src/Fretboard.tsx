@@ -8,12 +8,13 @@ import { FretMap } from './types';
 
 interface FretboardProps {
   fretMap: FretMap;
+  rootNotePositions: FretMap;
 }
 
 /**
  * Renders the fretboard and Heatmap. 
  */
-export const Fretboard: React.FC<FretboardProps> = ({ fretMap }) => {
+export const Fretboard: React.FC<FretboardProps> = ({ fretMap, rootNotePositions }) => {
   const fretPositions = getFretPositions();
 
   return (
@@ -21,7 +22,16 @@ export const Fretboard: React.FC<FretboardProps> = ({ fretMap }) => {
       <View style={styles.neck} />
       
       {fretPositions.map((pos, index) => {
-        const isHighlighted = fretMap[pos.stringIndex]?.includes(pos.fretIndex); 
+        const isRoot = rootNotePositions[pos.stringIndex]?.includes(pos.fretIndex);
+        const isHighlighted = fretMap[pos.stringIndex]?.includes(pos.fretIndex);
+        
+        // Define colors for each note 
+        let backgroundColor = 'rgba(255,255,255,0.1)';
+        if (isRoot) {
+            backgroundColor = '#FF3B30';
+        } else if (isHighlighted) {
+            backgroundColor = '#007AFF';
+        }
         
         return (
           <View
@@ -31,7 +41,7 @@ export const Fretboard: React.FC<FretboardProps> = ({ fretMap }) => {
               {
                 left: pos.x - GuitarSpecs.CIRCLE_SIZE / 2,
                 top: pos.y - GuitarSpecs.CIRCLE_SIZE / 2,
-                backgroundColor: isHighlighted ? '#FF3B30' : 'rgba(255,255,255,0.1)', // style highlighted notes
+                backgroundColor: backgroundColor,
               },
             ]}
           />
