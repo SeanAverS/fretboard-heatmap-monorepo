@@ -23,13 +23,13 @@ export const Fretboard: React.FC<FretboardProps> = ({ fretMap, rootNotePositions
       
       {fretPositions.map((pos, index) => {
         const isRoot = rootNotePositions[pos.stringIndex]?.includes(pos.fretIndex);
-        const isHighlighted = fretMap[pos.stringIndex]?.includes(pos.fretIndex);
+        const isNonRoot = fretMap[pos.stringIndex]?.includes(pos.fretIndex);
         
-        // Define colors for each note 
+        {/* Define color for each note  */}
         let backgroundColor = 'rgba(255,255,255,0.1)';
         if (isRoot) {
             backgroundColor = '#FF3B30';
-        } else if (isHighlighted) {
+        } else if (isNonRoot) {
             backgroundColor = '#007AFF';
         }
         
