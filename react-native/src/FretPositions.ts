@@ -40,15 +40,6 @@ export const getFretPositions = (): FretCoordinate[] => {
 
   // Place each string/fret position along fretboard 
   for (let s = 0; s < GuitarSpecs.strings.length; s++) {
-    // Handle Fret 0 
-    positions.push({
-      stringIndex: s,
-      fretIndex: 0,
-      x: GuitarSpecs.NECK_HORIZONTAL_PADDING / 2,
-      y: stringYPositions[s],
-    });
-
-    // Handle Frets 1 to 12
     for (let f = 1; f <= GuitarSpecs.frets.length; f++) {
       const midX = (fretXPositions[f - 1] + fretXPositions[f]) / 2;
       

@@ -27,7 +27,7 @@ export const GuitarSpecs = {
   FRET_BOARD_HEIGHT: 280,
 
   /** Offset padding to center heatmap notes */
-  NECK_HORIZONTAL_PADDING: 45,
+  NECK_HORIZONTAL_PADDING: -10,
 
   /** heatmap circle size */
   CIRCLE_SIZE: 24, 
