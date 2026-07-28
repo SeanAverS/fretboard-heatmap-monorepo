@@ -17,15 +17,38 @@ interface FretboardProps {
 export const Fretboard: React.FC<FretboardProps> = ({ fretMap, rootNotePositions }) => {
   const fretPositions = getFretPositions();
 
+  // Calculate vertical string positions
+  const stringYPositions = GuitarSpecs.strings.map((_, index) => 
+    (index * (GuitarSpecs.FRET_BOARD_HEIGHT / GuitarSpecs.strings.length)) + 20
+  );
+
+  // Calculate horizontal fret positions
+  const fretXPositions: number[] = [GuitarSpecs.NECK_HORIZONTAL_PADDING]; 
+  let currentX = GuitarSpecs.NUT_WIDTH + GuitarSpecs.NECK_HORIZONTAL_PADDING;
+  for (let i = 0; i < GuitarSpecs.frets.length; i++) {
+    currentX += GuitarSpecs.frets[i];
+    fretXPositions.push(currentX);
+  }
+
   return (
     <View style={styles.boardContainer}>
       <View style={styles.neck} />
       
+      {/* Frets */}
+      {fretXPositions.map((x, index) => (
+        <View key={`fret-${index}`} style={[styles.fretLine, { left: x }]} />
+      ))}
+
+      {/* Strings */}
+      {stringYPositions.map((y, index) => (
+        <View key={`string-${index}`} style={[styles.stringLine, { top: y, height: GuitarSpecs.strings[index] }]} />
+      ))}
+      
+      {/* Notes */}
       {fretPositions.map((pos, index) => {
         const isRoot = rootNotePositions[pos.stringIndex]?.includes(pos.fretIndex);
         const isNonRoot = fretMap[pos.stringIndex]?.includes(pos.fretIndex);
         
-        {/* Define color for each note  */}
         let backgroundColor = 'rgba(255,255,255,0.1)';
         if (isRoot) {
             backgroundColor = '#FF3B30';
@@ -60,11 +83,24 @@ const styles = StyleSheet.create({
   neck: {
     position: 'absolute',
     top: 0,
-    left: -18, // push beginning of guitar neck
-    right: -99,   // extend end of guitar neck 
+    left: -18,
+    right: -99,
     height: GuitarSpecs.FRET_BOARD_HEIGHT,
-    backgroundColor: '#4A3728',
+    backgroundColor: '#2c1609', // Mahogany
     borderRadius: 5,
+  },
+  fretLine: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    width: GuitarSpecs.WIRE_WIDTH,
+    backgroundColor: '#c0c0c0', // Silver fret wire
+  },
+  stringLine: {
+    position: 'absolute',
+    left: -18,
+    right: -99,
+    backgroundColor: '#e0e0e0', // String color
   },
   circle: {
     position: 'absolute',

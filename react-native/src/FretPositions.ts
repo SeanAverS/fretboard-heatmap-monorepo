@@ -11,24 +11,26 @@ export interface FretCoordinate {
 }
 
 /**
+ * Calculates and returns horizonal fret positions.
+ */
+export const getFretLineXPositions = (): number[] => {
+  const fretXPositions: number[] = [GuitarSpecs.NECK_HORIZONTAL_PADDING];
+  let currentX = GuitarSpecs.NUT_WIDTH + GuitarSpecs.NECK_HORIZONTAL_PADDING;
+  for (let i = 0; i < GuitarSpecs.frets.length; i++) {
+    currentX += GuitarSpecs.frets[i];
+    fretXPositions.push(currentX);
+  }
+  return fretXPositions;
+};
+
+/**
  * Calculates and returns coordinates for all fret/string positions.
  * 
  * @returns Array of FretCoordinate objects to render
  */
 export const getFretPositions = (): FretCoordinate[] => {
   const positions: FretCoordinate[] = [];
-
-  // Calculate fret positions (x-coordinates)
-  const fretXPositions: number[] = [0]; // Guitar nut 
-
-  // Account for guitar nut + neck spacing
-  let currentX = GuitarSpecs.NUT_WIDTH + GuitarSpecs.NECK_HORIZONTAL_PADDING;
-  
-  for (let i = 0; i < GuitarSpecs.frets.length; i++) {
-    fretXPositions.push(currentX);
-    // Shorten frets while moving up neck 
-    currentX += GuitarSpecs.frets[i] + GuitarSpecs.WIRE_WIDTH;
-  }
+  const fretXPositions = getFretLineXPositions();
 
   // Calculate string positions (y-coordinates)
   const stringYPositions = GuitarSpecs.strings.map((_, index) => 
@@ -38,11 +40,22 @@ export const getFretPositions = (): FretCoordinate[] => {
 
   // Place each string/fret position along fretboard 
   for (let s = 0; s < GuitarSpecs.strings.length; s++) {
-    for (let f = 0; f <= GuitarSpecs.frets.length; f++) {
+    // Handle Fret 0 
+    positions.push({
+      stringIndex: s,
+      fretIndex: 0,
+      x: GuitarSpecs.NECK_HORIZONTAL_PADDING / 2,
+      y: stringYPositions[s],
+    });
+
+    // Handle Frets 1 to 12
+    for (let f = 1; f <= GuitarSpecs.frets.length; f++) {
+      const midX = (fretXPositions[f - 1] + fretXPositions[f]) / 2;
+      
       positions.push({
         stringIndex: s,
         fretIndex: f,
-        x: fretXPositions[f],
+        x: midX,
         y: stringYPositions[s],
       });
     }
