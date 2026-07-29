@@ -32,6 +32,7 @@ export const Fretboard: React.FC<FretboardProps> = ({ fretMap, rootNotePositions
 
   return (
     <View style={styles.boardContainer}>
+      <View style={[styles.nut, { left: GuitarSpecs.NECK_LEFT_OFFSET }]} />
       <View style={styles.neck} />
       
       {/* Frets */}
@@ -83,7 +84,7 @@ const styles = StyleSheet.create({
   neck: {
     position: 'absolute',
     top: 0,
-    left: -18,
+    left: GuitarSpecs.NECK_LEFT_OFFSET,
     right: -99,
     height: GuitarSpecs.FRET_BOARD_HEIGHT,
     backgroundColor: '#2c1609', // Mahogany
@@ -98,7 +99,7 @@ const styles = StyleSheet.create({
   },
   stringLine: {
     position: 'absolute',
-    left: -18,
+    left: GuitarSpecs.NECK_LEFT_OFFSET,
     right: -99,
     backgroundColor: '#e0e0e0', // String color
   },
@@ -108,4 +109,12 @@ const styles = StyleSheet.create({
     height: GuitarSpecs.CIRCLE_SIZE,
     borderRadius: GuitarSpecs.CIRCLE_SIZE / 2,
   },
+  nut: {
+  position: 'absolute',
+  top: 0,
+  bottom: 0,
+  width: GuitarSpecs.NUT_WIDTH, 
+  backgroundColor: '#FFFDD0',
+  zIndex: 2,
+},
 });

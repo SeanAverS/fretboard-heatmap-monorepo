@@ -17,6 +17,9 @@ export const GuitarSpecs = {
    */
   roots: ['G', 'D', 'C', 'E', 'A'],
 
+  /** Left edge offset for neck, strings, and nut */
+  NECK_LEFT_OFFSET: -18,
+
    /** Bone nut width */
   NUT_WIDTH: 10,
 
