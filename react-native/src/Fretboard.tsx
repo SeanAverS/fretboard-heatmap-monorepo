@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     left: GuitarSpecs.NECK_LEFT_OFFSET,
-    right: -99,
+    right: GuitarSpecs.NECK_RIGHT_OVERFLOW,
     height: GuitarSpecs.FRET_BOARD_HEIGHT,
     backgroundColor: '#2c1609', // Mahogany
     borderRadius: 5,
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
   stringLine: {
     position: 'absolute',
     left: GuitarSpecs.NECK_LEFT_OFFSET,
-    right: -99,
+    right: GuitarSpecs.NECK_RIGHT_OVERFLOW,
     backgroundColor: '#e0e0e0', // String color
   },
   circle: {
