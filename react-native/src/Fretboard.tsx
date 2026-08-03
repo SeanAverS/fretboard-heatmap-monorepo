@@ -1,20 +1,32 @@
 // Style the guitar fretboard and handle root note labels   
 
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import { GuitarSpecs } from './GuitarSpecs';
-import { getFretPositions } from './FretPositions';
+import { getFretPositions, getFingerNumber } from './FretPositions';
 import { FretMap } from './types';
+import { NoteAlphabet } from './NoteAlphabet';
 
 interface FretboardProps {
   fretMap: FretMap;
   rootNotePositions: FretMap;
+  topMenu: 'scales' | 'chords' | null;
+  dropdownChoice: string;
+  root: string;
+  showLabels: boolean;
 }
 
 /**
  * Renders the fretboard and Heatmap. 
  */
-export const Fretboard: React.FC<FretboardProps> = ({ fretMap, rootNotePositions }) => {
+export const Fretboard: React.FC<FretboardProps> = ({ 
+  fretMap, 
+  rootNotePositions,
+  topMenu,
+  dropdownChoice,
+  root,
+  showLabels
+}) => {
   const fretPositions = getFretPositions();
 
   // Calculate vertical string positions
@@ -56,6 +68,13 @@ export const Fretboard: React.FC<FretboardProps> = ({ fretMap, rootNotePositions
         } else if (isNonRoot) {
             backgroundColor = '#007AFF';
         }
+
+        // Determine label display
+        const label = showLabels ? (
+            topMenu === 'scales' ? NoteAlphabet.getNoteName(pos.stringIndex, pos.fretIndex) :
+            topMenu === 'chords' ? getFingerNumber(dropdownChoice, root, pos.stringIndex, pos.fretIndex) :
+            ''
+        ) : '';
         
         return (
           <View
@@ -68,7 +87,9 @@ export const Fretboard: React.FC<FretboardProps> = ({ fretMap, rootNotePositions
                 backgroundColor: backgroundColor,
               },
             ]}
-          />
+          >
+            {label !== '' && <Text style={styles.label}>{label}</Text>}
+          </View>
         );
       })}
     </View>
@@ -108,6 +129,12 @@ const styles = StyleSheet.create({
     width: GuitarSpecs.CIRCLE_SIZE,
     height: GuitarSpecs.CIRCLE_SIZE,
     borderRadius: GuitarSpecs.CIRCLE_SIZE / 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  label: {
+      color: 'white',
+      fontWeight: 'bold',
   },
   nut: {
   position: 'absolute',
