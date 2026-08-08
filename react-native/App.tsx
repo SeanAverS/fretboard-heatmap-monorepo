@@ -27,8 +27,47 @@ function App(): React.JSX.Element {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Fretboard Heatmap</Text>
-      
+      {/* Top Header */}
+      <View style={styles.topNavContainer}>
+        {/* Balance Top Header Items */}
+        <View style={styles.navSideContainer} />
+
+        {/* Navigation */}
+        <View style={styles.navCenterContainer}>
+          <TouchableOpacity 
+            onPress={() => setShowLabels((prev) => !prev)}
+            style={styles.navItem}
+          >
+            <Text style={[styles.navText, showLabels && styles.activeNavText]}>
+              LABELS
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity 
+            onPress={() => setActivePattern('major-chord')}
+            style={styles.navItem}
+          >
+            <Text style={[styles.navText, topMenu === 'chords' && styles.activeNavText]}>
+              CHORDS
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity 
+            onPress={() => setActivePattern('major')}
+            style={styles.navItem}
+          >
+            <Text style={[styles.navText, topMenu === 'scales' && styles.activeNavText]}>
+              SCALES
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Dropdown + Balance Top Header Item */}
+        <View style={[styles.navSideContainer, styles.navRightContainer]}>
+          <PatternSelector activePattern={activePattern} onSelectPattern={setActivePattern} />
+        </View>
+      </View>
+
       {/* Fretboard */}
       <View style={styles.boardContainerWrapper}>
         <Fretboard 
@@ -41,20 +80,9 @@ function App(): React.JSX.Element {
         />
       </View> 
 
-      {/* Bottom Row */}
+      {/* Bottom Menu Labels */}
       <View style={styles.selectors}>
         <RootSelector activeRoot={activeRoot} onSelectRoot={setActiveRoot} />
-        
-        <PatternSelector activePattern={activePattern} onSelectPattern={setActivePattern} />
-        
-        <TouchableOpacity 
-          style={[styles.labelButton, showLabels && styles.labelButtonActive]}
-          onPress={() => setShowLabels((prev) => !prev)}
-        >
-          <Text style={[styles.labelButtonText, showLabels && styles.labelButtonTextActive]}>
-            {showLabels ? 'Hide' : 'Labels'}
-          </Text>
-        </TouchableOpacity>
       </View>
     </View>
   );
@@ -63,44 +91,52 @@ function App(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#121212',
+    backgroundColor: '#000000',
+    justifyContent: 'space-between',
+    paddingTop: 10,
   },
-  title: {
-    fontSize: 20,
-    color: '#fff',
-    textAlign: 'center',
-    marginVertical: 4,
+  topNavContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    zIndex: 10,
+    width: '100%',
+  },
+  navSideContainer: {
+    flex: 1,
+  },
+  navRightContainer: {
+    alignItems: 'flex-end',
+  },
+  navCenterContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
+  },
+  navItem: {
+    paddingVertical: 4,
+  },
+  navText: {
+    color: '#FFFFFF',
     fontWeight: 'bold',
+    fontSize: 12,
+    letterSpacing: 0.5,
+  },
+  activeNavText: {
+    color: '#FFCC00',
   },
   boardContainerWrapper: {
     width: '100%',
     alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
   },
   selectors: {
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    alignItems: 'center',
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-  },
-  labelButton: {
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 8,
-    backgroundColor: '#2A2A2A',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  labelButtonActive: {
-    backgroundColor: '#007AFF',
-  },
-  labelButtonText: {
-    color: '#AAAAAA',
-    fontWeight: '600',
-    fontSize: 13,
-  },
-  labelButtonTextActive: {
-    color: '#FFFFFF',
+    paddingHorizontal: 10,
+    paddingBottom: 12,
   },
 });
 
