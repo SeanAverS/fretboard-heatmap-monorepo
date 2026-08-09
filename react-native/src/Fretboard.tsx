@@ -62,12 +62,11 @@ export const Fretboard: React.FC<FretboardProps> = ({
         const isRoot = rootNotePositions[pos.stringIndex]?.includes(pos.fretIndex);
         const isNonRoot = fretMap[pos.stringIndex]?.includes(pos.fretIndex);
         
-        let backgroundColor = 'rgba(255,255,255,0.1)';
-        if (isRoot) {
-            backgroundColor = '#FF3B30';
-        } else if (isNonRoot) {
-            backgroundColor = '#007AFF';
+        if (!isRoot && !isNonRoot) {
+          return null;
         }
+
+        const backgroundColor = isRoot ? '#FF3B30' : '#007AFF';
 
         // Determine label display
         const label = showLabels ? (
