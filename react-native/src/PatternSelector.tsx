@@ -63,6 +63,7 @@ export const PatternSelector: React.FC<PatternSelectorProps> = ({
                     <Text style={styles.headerText}>{title.toUpperCase()}</Text>
                   )}
                   renderItem={({ item, index, section }) => {
+                    // no border for last items
                     const isLast = index === section.data.length - 1;
                     const isSelected = item === activePattern;
 
