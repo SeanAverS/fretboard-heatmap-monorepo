@@ -47,6 +47,26 @@ export const Fretboard: React.FC<FretboardProps> = ({
       <View style={[styles.nut, { left: GuitarSpecs.NECK_LEFT_OFFSET }]} />
       <View style={styles.neck} />
       
+      {/* Inlays */}
+      {[3, 5, 7, 9, 12].map(fretNumber => {
+        const leftX = fretXPositions[fretNumber - 1];
+        const rightX = fretXPositions[fretNumber];
+        const centerX = (leftX + rightX) / 2;
+        
+        if (fretNumber === 12) {
+          return (
+            <React.Fragment key="inlay-12">
+              <View style={[styles.inlayDot, { left: centerX - 6, top: GuitarSpecs.FRET_BOARD_HEIGHT / 2 - 20 }]} />
+              <View style={[styles.inlayDot, { left: centerX - 6, top: GuitarSpecs.FRET_BOARD_HEIGHT / 2 + 20 }]} />
+            </React.Fragment>
+          );
+        }
+        
+        return (
+          <View key={`inlay-${fretNumber}`} style={[styles.inlayDot, { left: centerX - 6, top: GuitarSpecs.FRET_BOARD_HEIGHT / 2 }]} />
+        );
+      })}
+
       {/* Frets */}
       {fretXPositions.map((x, index) => (
         <View key={`fret-${index}`} style={[styles.fretLine, { left: x }]} />
@@ -143,4 +163,11 @@ const styles = StyleSheet.create({
   backgroundColor: '#FFFDD0',
   zIndex: 2,
 },
+  inlayDot: {
+    position: 'absolute',
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    backgroundColor: 'rgba(255, 255, 255, 0.56)',
+  },
 });
