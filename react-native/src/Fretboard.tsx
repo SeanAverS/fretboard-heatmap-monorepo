@@ -53,17 +53,31 @@ export const Fretboard: React.FC<FretboardProps> = ({
         const rightX = fretXPositions[fretNumber];
         const centerX = (leftX + rightX) / 2;
         
+        const dotRadius = 9;
+        const centerY = GuitarSpecs.FRET_BOARD_HEIGHT / 2;
+
         if (fretNumber === 12) {
           return (
             <React.Fragment key="inlay-12">
-              <View style={[styles.inlayDot, { left: centerX - 6, top: GuitarSpecs.FRET_BOARD_HEIGHT / 2 - 20 }]} />
-              <View style={[styles.inlayDot, { left: centerX - 6, top: GuitarSpecs.FRET_BOARD_HEIGHT / 2 + 20 }]} />
+              {/* Gap between B & G strings */}
+              <View style={[styles.inlayDot, { left: centerX - dotRadius, top: centerY - 60 }]} />
+              {/* Gap between D & A strings */}
+              <View style={[styles.inlayDot, { left: centerX - dotRadius, top: centerY + 33 }]} />
             </React.Fragment>
           );
         }
         
         return (
-          <View key={`inlay-${fretNumber}`} style={[styles.inlayDot, { left: centerX - 6, top: GuitarSpecs.FRET_BOARD_HEIGHT / 2 }]} />
+          <View 
+            key={`inlay-${fretNumber}`} 
+            style={[
+              styles.inlayDot, 
+              { 
+                left: centerX - dotRadius, 
+                top: centerY - dotRadius 
+              }
+            ]} 
+          />
         );
       })}
 
