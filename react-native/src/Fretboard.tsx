@@ -45,7 +45,9 @@ export const Fretboard: React.FC<FretboardProps> = ({
   return (
     <View style={styles.boardContainer}>
       <View style={[styles.nut, { left: GuitarSpecs.NECK_LEFT_OFFSET }]} />
-      <View style={styles.neck} />
+      <View style={styles.neck}>
+        <View style={styles.woodGlow} />
+      </View>
       
       {/* Inlays */}
       {[3, 5, 7, 9, 12].map(fretNumber => {
@@ -141,8 +143,22 @@ const styles = StyleSheet.create({
     left: GuitarSpecs.NECK_LEFT_OFFSET,
     right: GuitarSpecs.NECK_RIGHT_OVERFLOW,
     height: GuitarSpecs.FRET_BOARD_HEIGHT,
-    backgroundColor: '#2c1609', // Mahogany
-    borderRadius: 5,
+    backgroundColor: '#1d0f08', // Darker mahogany border tone
+    borderRadius: 4,
+    borderTopWidth: 3,
+    borderTopColor: '#0f0704',
+    borderBottomWidth: 3,
+    borderBottomColor: '#0f0704',
+    overflow: 'hidden', 
+  },
+  woodGlow: {
+    position: 'absolute',
+    top: 18, 
+    bottom: 18,
+    left: 0,
+    right: 0,
+    backgroundColor: '#4a2a18', 
+    opacity: 0.85,
   },
   fretLine: {
     position: 'absolute',
