@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 import { GuitarSpecs } from './GuitarSpecs';
 import { getFretPositions, getFingerNumber } from './FretPositions';
 import { FretMap } from './types';
@@ -44,10 +45,13 @@ export const Fretboard: React.FC<FretboardProps> = ({
 
   return (
     <View style={styles.boardContainer}>
+      <LinearGradient
+        colors={['#0a0302', '#5a2902', '#0a0302']}
+        locations={[0, 0.5, 1]}
+        style={styles.neck}
+      />
+
       <View style={[styles.nut, { left: GuitarSpecs.NECK_LEFT_OFFSET }]} />
-      <View style={styles.neck}>
-        <View style={styles.woodGlow} />
-      </View>
       
       {/* Inlays */}
       {[3, 5, 7, 9, 12].map(fretNumber => {
@@ -143,35 +147,21 @@ const styles = StyleSheet.create({
     left: GuitarSpecs.NECK_LEFT_OFFSET,
     right: GuitarSpecs.NECK_RIGHT_OVERFLOW,
     height: GuitarSpecs.FRET_BOARD_HEIGHT,
-    backgroundColor: '#1d0f08', // Darker mahogany border tone
-    borderRadius: 4,
-    borderTopWidth: 3,
-    borderTopColor: '#0f0704',
-    borderBottomWidth: 3,
-    borderBottomColor: '#0f0704',
-    overflow: 'hidden', 
-  },
-  woodGlow: {
-    position: 'absolute',
-    top: 18, 
-    bottom: 18,
-    left: 0,
-    right: 0,
-    backgroundColor: '#4a2a18', 
-    opacity: 0.85,
   },
   fretLine: {
     position: 'absolute',
     top: 0,
     bottom: 0,
-    width: GuitarSpecs.WIRE_WIDTH,
-    backgroundColor: '#c0c0c0', // Silver fret wire
+    width: 1.5,
+    backgroundColor: '#B0B3B8',
+    zIndex: 1,
   },
   stringLine: {
     position: 'absolute',
     left: GuitarSpecs.NECK_LEFT_OFFSET,
     right: GuitarSpecs.NECK_RIGHT_OVERFLOW,
-    backgroundColor: '#e0e0e0', // String color
+    backgroundColor: '#DCDFE4',
+    zIndex: 2,
   },
   circle: {
     position: 'absolute',
@@ -180,24 +170,28 @@ const styles = StyleSheet.create({
     borderRadius: GuitarSpecs.CIRCLE_SIZE / 2,
     justifyContent: 'center',
     alignItems: 'center',
+    zIndex: 10,
   },
   label: {
-      color: 'white',
-      fontWeight: 'bold',
+    color: 'white',
+    fontWeight: 'bold',
   },
   nut: {
-  position: 'absolute',
-  top: 0,
-  bottom: 0,
-  width: GuitarSpecs.NUT_WIDTH, 
-  backgroundColor: '#FFFDD0',
-  zIndex: 2,
-},
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    width: GuitarSpecs.NUT_WIDTH, 
+    backgroundColor: '#EBE7DF',
+    borderRightWidth: 1,
+    borderRightColor: '#A8A49D',
+    zIndex: 3,
+  },
   inlayDot: {
     position: 'absolute',
-    width: 18,
-    height: 18,
-    borderRadius: 9,
-    backgroundColor: 'rgba(255, 255, 255, 0.56)',
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    backgroundColor: '#8E8E93',
+    zIndex: 0,
   },
 });
