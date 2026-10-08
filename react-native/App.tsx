@@ -5,10 +5,11 @@ import { PatternSelector } from './src/PatternSelector';
 import { Fretboard } from './src/Fretboard';
 import { generateRootNoteMap } from './src/RootNotePositions';
 import { getHeatmap } from './src/HeatmapEngine';
+import { TopMenuKeyMatcher } from './src/TopMenuKeyMatcher';
 
 function App(): React.JSX.Element {
   const [activeRoot, setActiveRoot] = useState<string>('G');
-  const [activePattern, setActivePattern] = useState<string>('major');
+  const [activePattern, setActivePattern] = useState<string>('major-scale');
   const [showLabels, setShowLabels] = useState<boolean>(false);
 
   const rootNoteMap = useMemo(() => generateRootNoteMap(), []);
@@ -44,7 +45,7 @@ function App(): React.JSX.Element {
           </TouchableOpacity>
 
           <TouchableOpacity 
-            onPress={() => setActivePattern('major-chord')}
+            onPress={() => setActivePattern((prev) => TopMenuKeyMatcher.getMatch(prev, 'chords'))}
             style={styles.navItem}
           >
             <Text style={[styles.navText, topMenu === 'chords' && styles.activeNavText]}>
@@ -53,7 +54,7 @@ function App(): React.JSX.Element {
           </TouchableOpacity>
 
           <TouchableOpacity 
-            onPress={() => setActivePattern('major')}
+            onPress={() => setActivePattern((prev) => TopMenuKeyMatcher.getMatch(prev, 'scales'))}
             style={styles.navItem}
           >
             <Text style={[styles.navText, topMenu === 'scales' && styles.activeNavText]}>
