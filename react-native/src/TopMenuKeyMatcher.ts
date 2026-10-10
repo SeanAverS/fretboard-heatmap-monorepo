@@ -6,10 +6,11 @@ export class TopMenuKeyMatcher {
     const isChord = lower.includes('chord');
     const isMinor = lower.includes('minor') || lower.includes('min');
 
+    // receives current top menu ('chords' or 'scales') choice 
     if (targetMenu === 'chords') {
       if (isChord) return currentPattern;
       return isMinor ? 'minor-chord' : 'major-chord';
-    } else {
+    } else { // (targetMenu === 'scales')
       if (!isChord && lower !== 'root only') return currentPattern;
       return isMinor ? 'minor-scale' : 'major-scale';
     }
