@@ -83,7 +83,12 @@ function App(): React.JSX.Element {
 
       {/* Bottom Menu Labels */}
       <View style={styles.selectors}>
-        <RootSelector activeRoot={activeRoot} onSelectRoot={setActiveRoot} />
+        <RootSelector 
+          activeRoot={activeRoot} 
+          onSelectRoot={setActiveRoot} 
+          topMenu={topMenu}
+          dropdownChoice={activePattern}
+        />
       </View>
     </View>
   );
