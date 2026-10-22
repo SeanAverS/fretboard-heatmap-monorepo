@@ -1,7 +1,7 @@
 // Style the guitar fretboard and handle root note labels   
 
-import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import React, { useRef, useEffect } from 'react';
+import { View, StyleSheet, Text, Animated } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { GuitarSpecs } from './GuitarSpecs';
 import { getFretPositions, getFingerNumber } from './FretPositions';
@@ -29,6 +29,26 @@ export const Fretboard: React.FC<FretboardProps> = ({
   showLabels
 }) => {
   const fretPositions = getFretPositions();
+
+  const slideAnim = useRef(new Animated.Value(-20)).current;
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    slideAnim.setValue(-20);
+    fadeAnim.setValue(0);
+    Animated.parallel([
+      Animated.timing(slideAnim, {
+        toValue: 0,
+        duration: 150,
+        useNativeDriver: true,
+      }),
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 150,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [root, dropdownChoice, topMenu]);
 
   // Calculate vertical string positions
   const stringYPositions = GuitarSpecs.strings.map((_, index) => 
@@ -98,39 +118,51 @@ export const Fretboard: React.FC<FretboardProps> = ({
       ))}
       
       {/* Notes */}
-      {fretPositions.map((pos, index) => {
-        const isRoot = rootNotePositions[pos.stringIndex]?.includes(pos.fretIndex);
-        const isNonRoot = fretMap[pos.stringIndex]?.includes(pos.fretIndex);
-        
-        if (!isRoot && !isNonRoot) {
-          return null;
-        }
+      <Animated.View
+        style={[
+          StyleSheet.absoluteFill,
+          {
+            transform: [{ translateX: slideAnim }],
+            opacity: fadeAnim,
+            zIndex: 10,
+          },
+        ]}
+        pointerEvents="box-none"
+      >
+        {fretPositions.map((pos, index) => {
+          const isRoot = rootNotePositions[pos.stringIndex]?.includes(pos.fretIndex);
+          const isNonRoot = fretMap[pos.stringIndex]?.includes(pos.fretIndex);
+          
+          if (!isRoot && !isNonRoot) {
+            return null;
+          }
 
-        const backgroundColor = isRoot ? '#FF3B30' : '#007AFF';
+          const backgroundColor = isRoot ? '#FF3B30' : '#007AFF';
 
-        // Determine label display
-        const label = showLabels ? (
-            topMenu === 'scales' ? NoteAlphabet.getNoteName(pos.stringIndex, pos.fretIndex) :
-            topMenu === 'chords' ? getFingerNumber(dropdownChoice, root, pos.stringIndex, pos.fretIndex) :
-            ''
-        ) : '';
-        
-        return (
-          <View
-            key={index}
-            style={[
-              styles.circle,
-              {
-                left: pos.x - GuitarSpecs.CIRCLE_SIZE / 2,
-                top: pos.y - GuitarSpecs.CIRCLE_SIZE / 2,
-                backgroundColor: backgroundColor,
-              },
-            ]}
-          >
-            {label !== '' && <Text style={styles.label}>{label}</Text>}
-          </View>
-        );
-      })}
+          // Determine label display
+          const label = showLabels ? (
+              topMenu === 'scales' ? NoteAlphabet.getNoteName(pos.stringIndex, pos.fretIndex) :
+              topMenu === 'chords' ? getFingerNumber(dropdownChoice, root, pos.stringIndex, pos.fretIndex) :
+              ''
+          ) : '';
+          
+          return (
+            <View
+              key={index}
+              style={[
+                styles.circle,
+                {
+                  left: pos.x - GuitarSpecs.CIRCLE_SIZE / 2,
+                  top: pos.y - GuitarSpecs.CIRCLE_SIZE / 2,
+                  backgroundColor: backgroundColor,
+                },
+              ]}
+            >
+              {label !== '' && <Text style={styles.label}>{label}</Text>}
+            </View>
+          );
+        })}
+      </Animated.View>
     </View>
   );
 };
