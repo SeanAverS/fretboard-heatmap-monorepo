@@ -1,5 +1,5 @@
 # FretboardHeatmap 
-A mobile app to help guitarists visualize notes on a fretboard. This repository contains source code for React Native, iOS and Android versions.
+A mobile app to help guitarists visualize notes on a fretboard. This repository contains source code for React Native, iOS and Android versions. (Video demo from IOS version)
 
 ![Demo of App Interaction (iOS)](./ios-native/app_demo.gif)
 
